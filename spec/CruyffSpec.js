@@ -8,6 +8,30 @@ describe('Cruyff',function() {
     expect($.fn.handleRemoteCrud).wasCalled();
   });
 
+  it('should call ajax success function',function(){
+    spyOn($.fn, 'cruyffSetup').andReturn({url:'spec/fixtures/view.html'});
+    //spyOn($.fn, 'ajaxSuccess');
+      $.jasmine.inject('<a href="spec/fixtures/view.html"\
+                           data-type="json"\
+                           data-method="delete"\
+                           data-remote="true">remote_link</a>');
+      element = $('a[data-remote]');
+    $.fn.handleRemote(element);
+    //expect($.fn.ajaxSuccess).wasCalled();
+    //spyOn($.fn, 'ajaxSubmit');
+    //$.fn.handleRemote('element');
+    //expect($.fn.ajaxSubmit).wasCalled();
+    /*
+    $.jasmine.inject('<a href="spec/fixtures/view.html" data-remote="true">remote_link</a>');
+    var call_success;
+    var remote_link = $('a[data-remote]');    
+    remote_link.live('ajax:success', function(e, data, status, xhr) { 
+      call_success = true;
+    }).trigger('click');
+    expect(call_success).toBeTruthy();
+    */
+  });
+
   describe('Setup from hyperlink', function() {
     beforeEach(function() {
       $.jasmine.inject('<a href="spec/fixtures/view.html"\
@@ -86,13 +110,4 @@ describe('Cruyff',function() {
     });
   });
 
-  xit('should call ajax success function for hyperlink with data-remote',function(){
-    $.jasmine.inject('<a href="spec/fixtures/view.html" data-remote="true">remote_link</a>');
-    var call_success;
-    var remote_link = $('a[data-remote]');    
-    remote_link.live('ajax:success', function(e, data, status, xhr) { 
-      call_success = true;
-    }).trigger('click');
-    expect(call_success).toBeTruthy();
-  });
 });
