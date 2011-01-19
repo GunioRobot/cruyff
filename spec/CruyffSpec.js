@@ -1,42 +1,42 @@
 describe('Cruyff',function() {
-  var remote_link,
-      link_url,
-      link_method,
-      remote_form,
-      form_url,
-      form_method;
-
-  beforeEach(function () {
-    $.jasmine.inject('<a href="spec/fixtures/view.html" data-remote="true">remote_link</a>');
-    remote_link = $('a[data-remote]')[0];
-    link_url = $.fn.crudSetup($(remote_link)).url;
-    link_method = $.fn.crudSetup($(remote_link)).method;
-
-    $.jasmine.inject('<form action="spec/fixtures/view.html" method="post" data-remote="true"></form>');
-    remote_form = $('form[data-remote]')[0];
-    form_url = $.fn.crudSetup($(remote_form)).url;
-    form_method = $.fn.crudSetup($(remote_form)).method;
-  });
-
+  var cryffSettings;
 
   it('should override rails handleRemote function',function(){
     spyOn($.fn, 'handleRemoteCrud');
     $.fn.handleRemote('element');
     expect($.fn.handleRemoteCrud).wasCalled();
-  })
+  });
 
-  it('should get url from form',function(){
-    expect(form_url).toEqual('spec/fixtures/view.html');
-  })
+  describe('Setup hyperlink', function() {
+    beforeEach(function() {
+      $.jasmine.inject('<a href="spec/fixtures/view.html" data-method="delete" data-remote="true">remote_link</a>');
+      cryffSettings = $.fn.cruyffSetup($('a[data-remote]'));
+    });
 
-  it('should get method from form',function(){
-    expect(form_method).toEqual('post');
-  })
+    it('should setup url',function(){
+      expect(cryffSettings.url).toEqual('spec/fixtures/view.html');
+    });
 
-  it('should get url from hiperlink',function(){
-    expect(link_url).toEqual('spec/fixtures/view.html');
-  })
+    it('should setup method',function(){
+      expect(cryffSettings.method).toEqual('delete');
+    });
+  });
 
+  describe('Setup form', function() {
+    beforeEach(function() {
+      $.jasmine.inject('<form action="spec/fixtures/view.html" method="post" data-remote="true"></form>');
+      cryffSettings = $.fn.cruyffSetup($('form[data-remote]'));
+    });
+
+    it('should setup url',function(){
+      expect(cryffSettings.url).toEqual('spec/fixtures/view.html');
+    });
+
+    it('should setup method',function(){
+      expect(cryffSettings.method).toEqual('post');
+    });
+
+  });
 
   xit('should call ajax success function for hyperlink with data-remote',function(){
     $.jasmine.inject('<a href="spec/fixtures/view.html" data-remote="true">remote_link</a>');
@@ -46,5 +46,5 @@ describe('Cruyff',function() {
       call_success = true;
     }).trigger('click');
     expect(call_success).toBeTruthy();
-  })
+  });
 });
