@@ -1,5 +1,6 @@
 describe('Cruyff',function() {
-  var cryffSettings;
+  var cruyffSettings,
+      element;
 
   it('should override rails handleRemote function',function(){
     spyOn($.fn, 'handleRemoteCrud');
@@ -7,35 +8,82 @@ describe('Cruyff',function() {
     expect($.fn.handleRemoteCrud).wasCalled();
   });
 
-  describe('Setup hyperlink', function() {
+  describe('Setup from hyperlink', function() {
     beforeEach(function() {
-      $.jasmine.inject('<a href="spec/fixtures/view.html" data-method="delete" data-remote="true">remote_link</a>');
-      cryffSettings = $.fn.cruyffSetup($('a[data-remote]'));
+      $.jasmine.inject('<a href="spec/fixtures/view.html"\
+                           data-type="json"\
+                           data-method="delete"\
+                           data-remote="true">remote_link</a>');
+      element = $('a[data-remote]');
+      cruyffSettings = $.fn.cruyffSetup(element);
     });
 
     it('should setup url',function(){
-      expect(cryffSettings.url).toEqual('spec/fixtures/view.html');
+      expect(cruyffSettings.url).toEqual('spec/fixtures/view.html');
     });
 
     it('should setup method',function(){
-      expect(cryffSettings.method).toEqual('delete');
+      expect(cruyffSettings.method).toEqual('delete');
+    });
+
+    it('should setup data type from hyperlink',function(){
+      expect(cruyffSettings.dataType).toEqual('json');
+    });
+
+    it('should setup data type from ajax Settings',function(){
+      element.attr('data-type', '');
+      $.ajaxSettings = {dataType: 'xml'};
+      cruyffSettings = $.fn.cruyffSetup(element);
+      expect(cruyffSettings.dataType).toEqual('xml');
+    });
+
+    it('should setup data',function(){
+      expect(cruyffSettings.data).toBeNull();
     });
   });
 
-  describe('Setup form', function() {
+  describe('Setup from form', function() {
     beforeEach(function() {
-      $.jasmine.inject('<form action="spec/fixtures/view.html" method="post" data-remote="true"></form>');
-      cryffSettings = $.fn.cruyffSetup($('form[data-remote]'));
+      $.jasmine.inject('<form action="spec/fixtures/view.html"\
+                              data-type="json"\
+                              method="post"\
+                              data-remote="true">\
+                          <input type="text" value="a1" name="post[title]" id="post_title">\
+                          <input type="submit" value="Update" name="commit" id="post_submit">\
+                        </form>');
+      element = $('form[data-remote]');
+      cruyffSettings = $.fn.cruyffSetup(element);
     });
 
     it('should setup url',function(){
-      expect(cryffSettings.url).toEqual('spec/fixtures/view.html');
+      expect(cruyffSettings.url).toEqual('spec/fixtures/view.html');
     });
 
     it('should setup method',function(){
-      expect(cryffSettings.method).toEqual('post');
+      expect(cruyffSettings.method).toEqual('post');
     });
 
+    it('should setup data type from form',function(){
+      expect(cruyffSettings.dataType).toEqual('json');
+    });
+
+    it('should setup data type from ajax Settings',function(){
+      element.attr('data-type', '');
+      $.ajaxSettings = {dataType: 'xml'};
+      cruyffSettings = $.fn.cruyffSetup(element);
+      expect(cruyffSettings.dataType).toEqual('xml');
+    });
+
+    it('should setup data',function(){
+      expect(cruyffSettings.data).toEqual([{name:'post[title]', value:'a1'}]);
+    });
+
+    it('should setup data with submit button',function(){
+      element.data('ujs:submit-button', 'button');
+      cruyffSettings = $.fn.cruyffSetup(element);
+      expect(cruyffSettings.data).toEqual([{name:'post[title]', value:'a1'}, 'button']);
+      expect(element.data('ujs:submit-button')).toBeNull();
+    });
   });
 
   xit('should call ajax success function for hyperlink with data-remote',function(){
