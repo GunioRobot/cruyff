@@ -42,10 +42,11 @@ describe('Cruyff',function() {
     });
 
     it('should setup response',function(){
+      expect(cruyffSettings.responseSelector).toEqual('#response');
       expect(cruyffSettings.response).toBeDefined();
     });
 
-    it('should render response',function(){
+    it('should render success response',function(){
       element.attr('data-type', '');
       element.attr('data-method', '');
       runs(function() {
@@ -56,6 +57,20 @@ describe('Cruyff',function() {
         expect(cruyffSettings.response).toHaveHtml('view html');
       });
     });
+
+    it('should render error response',function(){
+      element.attr('href', 'bad/url');
+      element.attr('data-type', '');
+      element.attr('data-method', '');
+      runs(function() {
+        element.trigger('click');
+      });
+      waits(100);
+      runs(function() {
+        expect(cruyffSettings.response.html()).toContain('NS_ERROR_DOM_BAD_URI');
+      });
+    });
+
   });
 
   describe('Setup from form', function() {
@@ -104,10 +119,11 @@ describe('Cruyff',function() {
     });
 
     it('should setup response',function(){
+      expect(cruyffSettings.responseSelector).toEqual('#response');
       expect(cruyffSettings.response).toBeDefined();
     });
 
-    it('should render response',function(){
+    it('should render success response',function(){
       element.attr('data-type', '');
       runs(function() {
         element.trigger('submit');
@@ -118,6 +134,17 @@ describe('Cruyff',function() {
       });
     });
 
+    it('should render error response',function(){
+      element.attr('action', 'bad/url');
+      element.attr('data-type', '');
+      runs(function() {
+        element.trigger('submit');
+      });
+      waits(100);
+      runs(function() {
+        expect(cruyffSettings.response.html()).toContain('NS_ERROR_DOM_BAD_URI');
+      });
+    });
   });
 
 });
