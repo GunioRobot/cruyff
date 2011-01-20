@@ -2,21 +2,13 @@ describe('Cruyff',function() {
   var cruyffSettings,
       element;
 
-  it('should override rails handleRemote function',function(){
-    spyOn($.fn, 'handleRemoteCrud');
-    $.fn.handleRemote('element');
-    expect($.fn.handleRemoteCrud).wasCalled();
-  });
-
   it('should call ajax success function',function(){
     spyOn($.fn, 'cruyffSetup').andReturn({url:'spec/fixtures/view.html'});
     //spyOn($.fn, 'ajaxSuccess');
-      $.jasmine.inject('<a href="spec/fixtures/view.html"\
-                           data-type="json"\
-                           data-method="delete"\
-                           data-remote="true">remote_link</a>');
-      element = $('a[data-remote]');
-    $.fn.handleRemote(element);
+    $.jasmine.inject('<a href="spec/fixtures/view.html"\
+                         data-remote="true">remote_link</a>');
+    element = $('a[data-remote]');
+    element.trigger('click');
     //expect($.fn.ajaxSuccess).wasCalled();
     //spyOn($.fn, 'ajaxSubmit');
     //$.fn.handleRemote('element');
