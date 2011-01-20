@@ -133,10 +133,20 @@ describe('Cruyff',function() {
 
   describe('Bookmark Ajax calls', function() {
     beforeEach(function() {
-
+      $.jasmine.inject('<a href="spec/fixtures/view.html"\
+                           data-remote="true">remote_link</a>');
+      element = $('a[data-remote]');
+      cruyffSettings = $.fn.cruyffSetup(element);
     });
 
-    it('should bookmark',function(){
+    it('should bookmark',function() {
+      runs(function() {
+        $.fn.handleRemoteCrud(element);
+      });
+      waits(100);
+      runs(function() {
+        expect($.bbq.getState("app")).toEqual('spec/fixtures/view.html');
+      });
     });
 
 
