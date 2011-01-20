@@ -145,10 +145,14 @@ describe('Cruyff',function() {
       });
       waits(100);
       runs(function() {
-        expect($.bbq.getState("app")).toEqual('spec/fixtures/view.html');
+        expect($.bbq.getState('app')).toEqual('spec/fixtures/view.html');
       });
     });
 
+    it('should load browser url',function() {
+      $.bbq.pushState('app=spec/fixtures/view.html');
+      expect($.fn.cruyffUrl).toEqual('spec/fixtures/view.html');
+    });
 
   });
 
