@@ -56,6 +56,13 @@ describe('Cruyff',function() {
     it('should setup data',function(){
       expect(cruyffSettings.data).toBeNull();
     });
+
+    it('should override rails.js attach a handler',function(){
+      spyOn(element, 'click').andCallThrough();
+      element.trigger('click');
+      expect(element.click.callCount).toEqual(1);
+    });
+
   });
 
   describe('Setup from form', function() {
