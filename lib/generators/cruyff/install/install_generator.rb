@@ -30,13 +30,23 @@ module Cruyff
       end
 
       def download_ujs_driver
-        say_status("fetching", "jQuery UJS adapter (github HEAD)", :green)
-        get "https://github.com/rails/jquery-ujs/raw/master/src/rails.js", "public/javascripts/rails.js"
+        say_status("fetching", "jQuery UJS Cruyff adapter (github HEAD)", :green)
+        get "https://github.com/andref5/cruyff/raw/master/lib/generators/cruyff/templates/rails.js", "public/javascripts/rails.js"
       end
 
       def download_cruyff
-        say_status("fetching", "Cruyff (github HEAD)", :green)
+        say_status("fetching", "jQuery Cruyff plugin (github HEAD)", :green)
         get "https://github.com/andref5/cruyff/raw/master/lib/generators/cruyff/templates/jquery.cruyff.js", "public/javascripts/jquery.cruyff.js"
+      end
+
+      def download_jquery_bbq
+        say_status("fetching", "jQuery BBQ plugin: Back Button & Query Library (github HEAD)", :green)
+        get "https://github.com/cowboy/jquery-bbq/raw/master/jquery.ba-bbq.js", "public/javascripts/jquery.ba-bbq.js"
+      end
+
+      def download_jquery_form
+        say_status("fetching", "jQuery Form plugin (github HEAD)", :green)
+        get "https://github.com/malsup/form/raw/master/jquery.form.js", "public/javascripts/jquery.form.js"
       end
 
     private

@@ -6,6 +6,12 @@ describe('Cruyff',function() {
     $.jasmine.inject('<div id="response"></div>');
   });
 
+  it('should override rails handleRemote function',function(){
+    spyOn($.fn, 'handleRemoteCrud');
+    $.fn.handleRemote('element');
+    expect($.fn.handleRemoteCrud).wasCalled();
+  })
+
   describe('Setup from hyperlink', function() {
     beforeEach(function() {
       $.jasmine.inject('<a href="spec/fixtures/view.html"\
@@ -110,7 +116,7 @@ describe('Cruyff',function() {
 
     it('should render success response',function(){
       runs(function() {
-        $.fn.handleRemoteCrud(element);
+        element.trigger('click');
       });
       waits(100);
       runs(function() {
@@ -121,7 +127,7 @@ describe('Cruyff',function() {
     it('should render error response',function(){
       element.attr('href', 'bad/url');
       runs(function() {
-        $.fn.handleRemoteCrud(element);
+        element.trigger('click');
       });
       waits(100);
       runs(function() {
@@ -141,7 +147,7 @@ describe('Cruyff',function() {
 
     it('should bookmark',function() {
       runs(function() {
-        $.fn.handleRemoteCrud(element);
+        element.trigger('click');
       });
       waits(100);
       runs(function() {
@@ -149,7 +155,7 @@ describe('Cruyff',function() {
       });
     });
 
-    it('should load browser url',function() {
+    xit('should load browser url',function() {
       $.bbq.pushState('app=spec/fixtures/view.html');
       expect($.fn.cruyffUrl).toEqual('spec/fixtures/view.html');
     });

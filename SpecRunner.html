@@ -8,10 +8,10 @@
   <script type="text/javascript" src="spec/js_lib/jquery-1.4.4.js"></script>
   <script type="text/javascript" src="spec/js_lib/jquery.ba-bbq-1.2.1.js"></script>
   <script type="text/javascript" src="spec/js_lib/jquery.form-2.52.js"></script>
-  <script type="text/javascript" src="spec/js_lib/rails-11.01.12.js"></script> 
   <script type="text/javascript" src="spec/js_lib/jasmine-jquery-1.1.3.js"></script>
 
-  <script type="text/javascript" src="lib/generators/templates/jquery.cruyff.js"></script>
+  <script type="text/javascript" src="lib/generators/cruyff/templates/rails.js"></script>
+  <script type="text/javascript" src="lib/generators/cruyff/templates/jquery.cruyff.js"></script>
 
   <script type="text/javascript" src="spec/SpecHelper.js"></script>
   <script type="text/javascript" src="spec/js_lib/jasmine-fixture.js"></script>
@@ -24,6 +24,7 @@
 <script type="text/javascript">
 $(function() {
 /*
+  //this ajax call don't works on chrome. WTF???
   $.ajax({
     url: 'spec/fixtures/view.html',
     success: function(data, status, xhr) {
