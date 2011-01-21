@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.summary     = %q{Ajax CRUD solution for Rails applications.}
   s.description = %q{Cruyff is a Ajax CRUD solution for Rails applications.}
 
-  s.add_dependency("jquery-rails", "~> 0.2.6")
+  #s.add_dependency("jquery-rails", "~> 0.2.6")
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
