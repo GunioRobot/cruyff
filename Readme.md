@@ -19,11 +19,11 @@ This will remove the Prototype.js library from Rails, add latest jQuery library 
 
 ### Manual installation
 
-Download [jQuery][jquery], [jQuery BBQ plugin][jquery.bbq], [jQuery Form plugin][jquery.form], [jQuery Cruyff plugin][jquery.cruyff] and ["rails.js"][adapter] and place them in your "javascripts" directory.
+Download [jQuery][jquery], ["jquery.ba-bbq.js"][jquery.bbq], ["jquery.form.js"][jquery.form], ["jquery.cruyff.js"][jquery.cruyff] and ["rails.js"][adapter] and place them in your "javascripts" directory.
 
 Configure the following in your application startup file:
 
-    config.action_view.javascript_expansions[:defaults] = %w(jquery rails jquery.cruyff jquery.form jquery.bbq)
+    config.action_view.javascript_expansions[:defaults] = %w(jquery rails jquery.cruyff jquery.form jquery.ba-bbq)
 
 Now the template helper `javascript_include_tag :defaults` will generate SCRIPT tags to load jQuery and rails.js.
 
