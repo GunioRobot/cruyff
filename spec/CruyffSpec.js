@@ -19,7 +19,7 @@ describe('Cruyff',function() {
                            data-method="delete"\
                            data-remote="true">remote_link</a>');
       element = $('a[data-remote]');
-      cruyffSettings = $.fn.cruyff.cruyffSetup(element);
+      cruyffSettings = $.fn.cruyff.setup(element);
     });
 
     it('should setup url',function(){
@@ -38,7 +38,7 @@ describe('Cruyff',function() {
       element.attr('data-type', '');
       var _ajaxSettings = $.ajaxSettings;
       $.ajaxSettings = {dataType: 'xml'};
-      cruyffSettings = $.fn.cruyff.cruyffSetup(element);
+      cruyffSettings = $.fn.cruyff.setup(element);
       expect(cruyffSettings.dataType).toEqual('xml');
       $.ajaxSettings = _ajaxSettings;
     });
@@ -64,7 +64,7 @@ describe('Cruyff',function() {
                           <input type="submit" value="Update" name="commit" id="post_submit">\
                         </form>');
       element = $('form[data-remote]');
-      cruyffSettings = $.fn.cruyff.cruyffSetup(element);
+      cruyffSettings = $.fn.cruyff.setup(element);
     });
 
     it('should setup url',function(){
@@ -83,7 +83,7 @@ describe('Cruyff',function() {
       element.attr('data-type', '');
       var _ajaxSettings = $.ajaxSettings;
       $.ajaxSettings = {dataType: 'xml'};
-      cruyffSettings = $.fn.cruyff.cruyffSetup(element);
+      cruyffSettings = $.fn.cruyff.setup(element);
       expect(cruyffSettings.dataType).toEqual('xml');
       $.ajaxSettings = _ajaxSettings;
     });
@@ -94,7 +94,7 @@ describe('Cruyff',function() {
 
     it('should setup data with submit button',function(){
       element.data('ujs:submit-button', 'button');
-      cruyffSettings = $.fn.cruyff.cruyffSetup(element);
+      cruyffSettings = $.fn.cruyff.setup(element);
       expect(cruyffSettings.data).toEqual([{name:'post[title]', value:'a1'}, 'button']);
       expect(element.data('ujs:submit-button')).toBeNull();
     });
@@ -111,7 +111,7 @@ describe('Cruyff',function() {
       $.jasmine.inject('<a href="spec/fixtures/view.html"\
                            data-remote="true">remote_link</a>');
       element = $('a[data-remote]');
-      cruyffSettings = $.fn.cruyff.cruyffSetup(element);
+      cruyffSettings = $.fn.cruyff.setup(element);
     });
 
     it('should render success response',function(){
@@ -135,6 +135,23 @@ describe('Cruyff',function() {
       });
     });
 
+    it('should render server error response',function(){
+      $.fn.cruyff.renderError(cruyffSettings.response, null);
+      expect(cruyffSettings.response.html()).toContain('server error');
+    });
+
+    xit('should render response for delete links',function(){
+      element.attr('data-method', 'delete');
+      element.attr('data-confirm', 'Are you sure?');
+      runs(function() {
+        element.trigger('click');
+      });
+      waits(100);
+      runs(function() {
+        expect(cruyffSettings.response).toHaveHtml('view html');
+      });
+    });
+
   });
 
   describe('Bookmark Ajax calls', function() {
@@ -142,7 +159,7 @@ describe('Cruyff',function() {
       $.jasmine.inject('<a href="spec/fixtures/view.html"\
                            data-remote="true">remote_link</a>');
       element = $('a[data-remote]');
-      cruyffSettings = $.fn.cruyff.cruyffSetup(element);
+      cruyffSettings = $.fn.cruyff.setup(element);
     });
 
     it('should bookmark',function() {
