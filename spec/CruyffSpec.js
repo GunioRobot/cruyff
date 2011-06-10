@@ -6,13 +6,13 @@ describe('Cruyff',function() {
   beforeEach(function() {
     $.jasmine.inject('<div id="ajax-content"></div>');
 
-    $.jasmine.inject('<form id="form_id" action="spec/fixtures/view.html"\
+    $.jasmine.inject('<form id="form_id" action="spec/fixtures/view"\
                             method="post"\
                             data-remote="true">\
                       </form>');
     form = $('form[data-remote]');
 
-    $.jasmine.inject('<a id="hyperlink_id" href="spec/fixtures/view.html"\
+    $.jasmine.inject('<a id="hyperlink_id" href="spec/fixtures/view"\
                          data-remote="true" pass="#ajax-content">remote_link</a>');
     hyperlink = $('a[data-remote]');
   });
@@ -24,12 +24,43 @@ describe('Cruyff',function() {
       expect($.cruyff.ajax).toHaveBeenCalled();
     });
 
+    it('overrides rails handle remote', function() {
+      spyOn($.cruyff, 'handleRemote');
+      $.rails.handleRemote('element');
+      expect($.cruyff.handleRemote).toHaveBeenCalled();
+    });
+
     it('calls jquery ajax',function() {
       var callback = jasmine.createSpy();
       spyOn($, 'ajax').andCallFake(callback);
       $.cruyff.ajax('options');
       expect($.ajax).toHaveBeenCalled();
     });
+
+    it('gets element url', function() {
+      expect($.cruyff.elementUrl(hyperlink)).toEqual('spec/fixtures/view');
+      expect($.cruyff.elementUrl(form)).toEqual('spec/fixtures/view');
+    });
+
+    it('sets html format',function(){
+      runs(function() {
+        hyperlink.trigger('click');
+      });
+      waits(100);
+      runs(function() {
+        expect(hyperlink.attr('href')).toEqual("spec/fixtures/view.html");
+      });
+
+      runs(function() {
+        form.submit;
+      });
+      waits(100);
+      runs(function() {
+        expect(form.attr('action')).toEqual("spec/fixtures/view.html");
+      });
+
+    });
+
 
     it('setups element',function(){
       runs(function() {
@@ -40,6 +71,7 @@ describe('Cruyff',function() {
         expect($.cruyffSettings.element[0].id).toEqual("hyperlink_id");
       });
     });
+
   });
 
   describe('Render Ajax response', function() {
@@ -69,7 +101,7 @@ describe('Cruyff',function() {
 
   describe('Upload files', function() {
     beforeEach(function() {
-      $.jasmine.inject('<form id="form_multipart" action="spec/fixtures/view.html"\
+      $.jasmine.inject('<form id="form_multipart" action="spec/fixtures/view"\
                               method="post"\
                               enctype="multipart/form-data"\
                               pass="#ajax-content"\
@@ -91,18 +123,13 @@ describe('Cruyff',function() {
   });
 
   describe('Bookmark Ajax', function() {
-    it('gets next url', function() {
-      expect($.cruyff.nextUrl(hyperlink)).toEqual('spec/fixtures/view.html');
-      expect($.cruyff.nextUrl(form)).toEqual('spec/fixtures/view.html');
-    });
-
     it('bookmarks ajax success calls',function() {
       runs(function() {
         hyperlink.trigger('click');
       });
       waits(100);
       runs(function() {
-        expect($.bbq.getState($.cruyffSettings.appName)).toEqual('spec/fixtures/view.html');
+        expect($.bbq.getState($.cruyffSettings.appName)).toEqual('spec/fixtures/view');
       });
     });
 
@@ -124,13 +151,13 @@ describe('Cruyff',function() {
       });
       waits(100);
       runs(function() {
-        expect($.bbq.getState('setted_app_name')).toEqual('spec/fixtures/view.html');
+        expect($.bbq.getState('setted_app_name')).toEqual('spec/fixtures/view');
       });
     });
 
     xit('loads browser url',function() {
-      $.bbq.pushState('app=spec/fixtures/view.html');
-      expect($.fn.cruyffUrl).toEqual('spec/fixtures/view.html');
+      $.bbq.pushState('app=spec/fixtures/view');
+      expect($.fn.cruyffUrl).toEqual('spec/fixtures/view');
     });
 
   });
