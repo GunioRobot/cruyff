@@ -24,12 +24,6 @@ describe('Cruyff',function() {
       expect($.cruyff.ajax).toHaveBeenCalled();
     });
 
-    it('overrides rails handle remote', function() {
-      spyOn($.cruyff, 'handleRemote');
-      $.rails.handleRemote('element');
-      expect($.cruyff.handleRemote).toHaveBeenCalled();
-    });
-
     it('calls jquery ajax',function() {
       var callback = jasmine.createSpy();
       spyOn($, 'ajax').andCallFake(callback);
@@ -37,32 +31,27 @@ describe('Cruyff',function() {
       expect($.ajax).toHaveBeenCalled();
     });
 
+    it('sets request format',function() {
+      spyOn($, 'ajax');
+      spyOn($.cruyff, 'setRequestFormat');
+      $.cruyff.ajax({url: 'some/url'});
+      expect($.cruyff.setRequestFormat).toHaveBeenCalledWith({url: 'some/url'});
+    });
+
+    it('gets url with format', function() {
+      var options = {url: 'some/url'};
+      $.cruyff.setRequestFormat(options);
+      expect(options['url']).toEqual('some/url.html');
+      $.cruyff.setRequestFormat(options);
+      expect(options['url']).toEqual('some/url.html');
+    });
+
     it('gets element url', function() {
       expect($.cruyff.elementUrl(hyperlink)).toEqual('spec/fixtures/view');
       expect($.cruyff.elementUrl(form)).toEqual('spec/fixtures/view');
     });
 
-    it('sets html format',function(){
-      runs(function() {
-        hyperlink.trigger('click');
-      });
-      waits(100);
-      runs(function() {
-        expect(hyperlink.attr('href')).toEqual("spec/fixtures/view.html");
-      });
-
-      runs(function() {
-        form.submit;
-      });
-      waits(100);
-      runs(function() {
-        expect(form.attr('action')).toEqual("spec/fixtures/view.html");
-      });
-
-    });
-
-
-    it('setups element',function(){
+    it('setups element',function() {
       runs(function() {
         hyperlink.trigger('click');
       });
