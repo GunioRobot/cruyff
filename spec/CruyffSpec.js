@@ -57,7 +57,7 @@ describe('Cruyff',function() {
       });
       waits(100);
       runs(function() {
-        expect($.cruyffSettings.element[0].id).toEqual("hyperlink_id");
+        expect($.cruyff.settings.element[0].id).toEqual("hyperlink_id");
       });
     });
 
@@ -75,7 +75,7 @@ describe('Cruyff',function() {
     });
 
     it('renders error response',function(){
-      $.cruyffSettings.error500page = "spec/fixtures/500.html";
+      $.cruyff.settings.error500page = "spec/fixtures/500.html";
       hyperlink.attr('href', 'bad/url');
       runs(function() {
         hyperlink.trigger('click');
@@ -118,7 +118,7 @@ describe('Cruyff',function() {
       });
       waits(100);
       runs(function() {
-        expect($.bbq.getState($.cruyffSettings.appName)).toEqual('spec/fixtures/view');
+        expect($.bbq.getState($.cruyff.settings.appName)).toEqual('spec/fixtures/view');
       });
     });
 
@@ -129,13 +129,13 @@ describe('Cruyff',function() {
       });
       waits(100);
       runs(function() {
-        expect($.bbq.getState($.cruyffSettings.appName)).toEqual('bad/url');
+        expect($.bbq.getState($.cruyff.settings.appName)).toEqual('bad/url');
       });
     });
 
     it('sets app name',function() {
       runs(function() {
-        $.cruyffSettings.appName = 'setted_app_name';
+        $.cruyff.settings.appName = 'setted_app_name';
         hyperlink.trigger('click');
       });
       waits(100);
