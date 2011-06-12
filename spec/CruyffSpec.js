@@ -51,6 +51,11 @@ describe('Cruyff',function() {
       expect($.cruyff.elementUrl(form)).toEqual('spec/fixtures/view');
     });
 
+    it('renders data', function() {
+      $.cruyff.render('#ajax-content', 'data');
+      expect($('#ajax-content').html()).toMatch('data');
+    });
+
     it('setups element',function() {
       runs(function() {
         hyperlink.trigger('click');
