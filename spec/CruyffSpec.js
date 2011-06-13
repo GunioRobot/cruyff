@@ -51,8 +51,13 @@ describe('Cruyff',function() {
       expect($.cruyff.elementUrl(form)).toEqual('spec/fixtures/view');
     });
 
-    it('renders data', function() {
-      $.cruyff.render('#ajax-content', 'data');
+    it('gets reponse fragment html', function() {
+      var fragment = $.cruyff.fragment('#ajax-content', '<html><div id="ajax-content">only-inner-data</div><html>');
+      expect(fragment).toEqual('only-inner-data');
+    });
+
+    it('renders fragment data', function() {
+      $.cruyff.render('#ajax-content', '<html><div id="ajax-content">data</div><html>');
       expect($('#ajax-content').html()).toMatch('data');
     });
 
