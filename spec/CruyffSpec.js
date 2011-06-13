@@ -46,14 +46,11 @@ describe('Cruyff',function() {
       expect(options['url']).toEqual('some/url.html');
     });
 
-    it('gets element url', function() {
-      expect($.cruyff.elementUrl(hyperlink)).toEqual('spec/fixtures/view');
-      expect($.cruyff.elementUrl(form)).toEqual('spec/fixtures/view');
-    });
-
     it('gets reponse fragment html', function() {
       var fragment = $.cruyff.fragment('#ajax-content', '<html><div id="ajax-content">only-inner-data</div><html>');
       expect(fragment).toEqual('only-inner-data');
+      var fragment = $.cruyff.fragment('#ajax-content', 'data');
+      expect(fragment).toEqual('data');
     });
 
     it('renders fragment data', function() {
@@ -154,9 +151,26 @@ describe('Cruyff',function() {
       });
     });
 
-    xit('loads browser url',function() {
+    it('loads success browser url',function() {
       $.bbq.pushState('app=spec/fixtures/view');
-      expect($.fn.cruyffUrl).toEqual('spec/fixtures/view');
+      runs(function() {
+        $.cruyff.load('#ajax-content');
+      });
+      waits(100);
+      runs(function() {
+        expect($('#ajax-content').html()).toMatch('view html');
+      });
+    });
+
+    it('loads error browser url',function() {
+      $.bbq.pushState('app=bad/url');
+      runs(function() {
+        $.cruyff.load('#ajax-content');
+      });
+      waits(100);
+      runs(function() {
+        expect($('#ajax-content').html()).toMatch("We're sorry, but something went wrong");
+      });
     });
 
   });
