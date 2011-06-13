@@ -163,6 +163,7 @@ describe('Cruyff',function() {
     });
 
     it('loads error browser url',function() {
+      $.cruyff.settings.appName = 'app';
       $.bbq.pushState('app=bad/url');
       runs(function() {
         $.cruyff.load('#ajax-content');
