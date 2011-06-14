@@ -58,6 +58,9 @@ describe('Cruyff',function() {
       expect($('#ajax-content').html()).toMatch('data');
     });
 
+    xit('renders waiting data', function() {
+    });
+
     it('setups cruyff element',function() {
       runs(function() {
         hyperlink.trigger('click');
