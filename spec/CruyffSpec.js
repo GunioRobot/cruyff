@@ -93,6 +93,25 @@ describe('Cruyff',function() {
       });
     });
 
+    it('loads success url',function() {
+      runs(function() {
+        $.cruyff.load('spec/fixtures/view', '#ajax-content');
+      });
+      waits(100);
+      runs(function() {
+        expect($('#ajax-content').html()).toMatch('view html');
+      });
+    });
+
+    it('loads error url',function() {
+      runs(function() {
+        $.cruyff.load('bad/url', '#ajax-content');
+      });
+      waits(100);
+      runs(function() {
+        expect($('#ajax-content').html()).toMatch("We're sorry, but something went wrong");
+      });
+    });
   });
 
   describe('Upload files', function() {
@@ -151,27 +170,11 @@ describe('Cruyff',function() {
       });
     });
 
-    it('loads success browser url',function() {
+    it('loads browser url',function() {
+      spyOn($.cruyff, 'load');
       $.bbq.pushState('app=spec/fixtures/view');
-      runs(function() {
-        $.cruyff.load('#ajax-content');
-      });
-      waits(100);
-      runs(function() {
-        expect($('#ajax-content').html()).toMatch('view html');
-      });
-    });
-
-    it('loads error browser url',function() {
-      $.cruyff.settings.appName = 'app';
-      $.bbq.pushState('app=bad/url');
-      runs(function() {
-        $.cruyff.load('#ajax-content');
-      });
-      waits(100);
-      runs(function() {
-        expect($('#ajax-content').html()).toMatch("We're sorry, but something went wrong");
-      });
+      $.cruyff.loadBrowserUrl('#ajax-content');
+      expect($.cruyff.load).toHaveBeenCalledWith('spec/fixtures/view', '#ajax-content');
     });
 
   });
