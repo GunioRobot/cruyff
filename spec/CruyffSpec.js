@@ -68,19 +68,19 @@ describe('Cruyff',function() {
       });
     });
 
-    it('starts all elements',function() {
-      $.jasmine.inject('<div id="main"><form id="form_to_start" action="#" method="#"></form></div>');
-      $.jasmine.inject('<div id="main"><a id="link_to_start" href="#">remote_link</a></div>');
+    it('setups all elements',function() {
+      $.jasmine.inject('<div id="main"><form id="form_to_setup" action="#" method="#"></form></div>');
+      $.jasmine.inject('<div id="main"><a id="link_to_setup" href="#">remote_link</a></div>');
 
-      $.cruyff.startAllElements('#main');
+      $.cruyff.setUpElements('#main');
 
-      var form_to_start = $('#form_to_start');
-      var link_to_start = $('#link_to_start');
+      var form_to_setup = $('#form_to_setup');
+      var link_to_setup = $('#link_to_setup');
 
-      expect(link_to_start.attr('data-remote')).toEqual('true');
-      expect(link_to_start.attr('pass')).toEqual('#main');
-      expect(form_to_start.attr('data-remote')).toEqual('true');
-      expect(form_to_start.attr('pass')).toEqual('#main');
+      expect(link_to_setup.attr('data-remote')).toEqual('true');
+      expect(link_to_setup.attr('pass')).toEqual('#main');
+      expect(form_to_setup.attr('data-remote')).toEqual('true');
+      expect(form_to_setup.attr('pass')).toEqual('#main');
 
     });
 
@@ -109,9 +109,9 @@ describe('Cruyff',function() {
       });
     });
 
-    it('loads success url',function() {
+    it('starts success url',function() {
       runs(function() {
-        $.cruyff.load('spec/fixtures/view', '#ajax-content');
+        $.cruyff.start('spec/fixtures/view', '#ajax-content');
       });
       waits(100);
       runs(function() {
@@ -119,9 +119,9 @@ describe('Cruyff',function() {
       });
     });
 
-    it('loads error url',function() {
+    it('starts error url',function() {
       runs(function() {
-        $.cruyff.load('bad/url', '#ajax-content');
+        $.cruyff.start('bad/url', '#ajax-content');
       });
       waits(100);
       runs(function() {
@@ -160,7 +160,7 @@ describe('Cruyff',function() {
       });
       waits(100);
       runs(function() {
-        expect($.bbq.getState($.cruyff.settings.appName)).toEqual('spec/fixtures/view');
+        expect($.bbq.getState($.cruyff.settings.urlDesc)).toEqual('spec/fixtures/view');
       });
     });
 
@@ -171,26 +171,26 @@ describe('Cruyff',function() {
       });
       waits(100);
       runs(function() {
-        expect($.bbq.getState($.cruyff.settings.appName)).toEqual('bad/url');
+        expect($.bbq.getState($.cruyff.settings.urlDesc)).toEqual('bad/url');
       });
     });
 
     it('sets app name',function() {
       runs(function() {
-        $.cruyff.settings.appName = 'setted_app_name';
+        $.cruyff.settings.urlDesc = 'setted_url_desc';
         hyperlink.trigger('click');
       });
       waits(100);
       runs(function() {
-        expect($.bbq.getState('setted_app_name')).toEqual('spec/fixtures/view');
+        expect($.bbq.getState('setted_url_desc')).toEqual('spec/fixtures/view');
       });
     });
 
     it('loads browser url',function() {
-      spyOn($.cruyff, 'load');
+      spyOn($.cruyff, 'start');
       $.bbq.pushState('app=spec/fixtures/view');
       $.cruyff.loadBrowserUrl('#ajax-content');
-      expect($.cruyff.load).toHaveBeenCalledWith('spec/fixtures/view', '#ajax-content');
+      expect($.cruyff.start).toHaveBeenCalledWith('spec/fixtures/view', '#ajax-content');
     });
 
   });
