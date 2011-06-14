@@ -8,7 +8,7 @@ describe('Cruyff',function() {
 
     $.jasmine.inject('<form id="form_id" action="spec/fixtures/view"\
                             method="post"\
-                            data-remote="true">\
+                            data-remote="true" pass="ajax-content">\
                       </form>');
     form = $('form[data-remote]');
 
@@ -58,7 +58,7 @@ describe('Cruyff',function() {
       expect($('#ajax-content').html()).toMatch('data');
     });
 
-    it('setups element',function() {
+    it('setups cruyff element',function() {
       runs(function() {
         hyperlink.trigger('click');
       });
@@ -66,6 +66,22 @@ describe('Cruyff',function() {
       runs(function() {
         expect($.cruyff.settings.element[0].id).toEqual("hyperlink_id");
       });
+    });
+
+    it('starts all elements',function() {
+      $.jasmine.inject('<div id="main"><form id="form_to_start" action="#" method="#"></form></div>');
+      $.jasmine.inject('<div id="main"><a id="link_to_start" href="#">remote_link</a></div>');
+
+      $.cruyff.startAllElements('#main');
+
+      var form_to_start = $('#form_to_start');
+      var link_to_start = $('#link_to_start');
+
+      expect(link_to_start.attr('data-remote')).toEqual('true');
+      expect(link_to_start.attr('pass')).toEqual('#main');
+      expect(form_to_start.attr('data-remote')).toEqual('true');
+      expect(form_to_start.attr('pass')).toEqual('#main');
+
     });
 
   });
