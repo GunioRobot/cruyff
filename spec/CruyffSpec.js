@@ -128,7 +128,32 @@ describe('Cruyff',function() {
 
     it('starts success url',function() {
       runs(function() {
-        $.cruyff.start('spec/fixtures/view', '#ajax-content');
+        $.bbq.pushState('start=');
+        $.cruyff.settings.urlDesc = 'start';
+        $.cruyff.start('start', 'spec/fixtures/view', '#ajax-content');
+      });
+      waits(100);
+      runs(function() {
+        expect($('#ajax-content').html()).toMatch('view html');
+      });
+    });
+
+    it('setups elements on start',function() {
+      runs(function() {
+        spyOn($.cruyff, 'setUpElements');
+        $.cruyff.start('start', 'spec/fixtures/view', '#ajax-content');
+      });
+      waits(100);
+      runs(function() {
+        expect($.cruyff.setUpElements).toHaveBeenCalledWith('#ajax-content');
+      });
+    });
+
+    it('starts by broswer url',function() {
+      runs(function() {
+        $.bbq.pushState('start=spec/fixtures/view');
+        $.cruyff.settings.urlDesc = 'start';
+        $.cruyff.start('start', 'bad/url', '#ajax-content');
       });
       waits(100);
       runs(function() {
@@ -138,7 +163,9 @@ describe('Cruyff',function() {
 
     it('starts error url',function() {
       runs(function() {
-        $.cruyff.start('bad/url', '#ajax-content');
+        $.bbq.pushState('start=');
+        $.cruyff.settings.urlDesc = 'start';
+        $.cruyff.start('start', 'bad/url', '#ajax-content');
       });
       waits(100);
       runs(function() {
@@ -201,14 +228,6 @@ describe('Cruyff',function() {
       runs(function() {
         expect($.bbq.getState('setted_url_desc')).toEqual('spec/fixtures/view');
       });
-    });
-
-    it('routes browser url',function() {
-      spyOn($.cruyff, 'start');
-      $.bbq.pushState('urlApp=spec/fixtures/view');
-      $.cruyff.route('urlApp','#ajax-content');
-      expect($.cruyff.start).toHaveBeenCalledWith('spec/fixtures/view', '#ajax-content');
-      expect($.cruyff.element).toEqual('urlApp');
     });
   });
 
