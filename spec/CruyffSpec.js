@@ -24,6 +24,19 @@ describe('Cruyff',function() {
       expect($.cruyff.ajax).toHaveBeenCalled();
     });
 
+    it('overrides rails handleRemote call', function() {
+      spyOn($.cruyff, 'handleRemote');
+      $.rails.handleRemote(hyperlink);
+      expect($.cruyff.handleRemote).toHaveBeenCalled();
+    });
+   
+    it('not overrides rails handleRemote call', function() {
+      spyOn($.cruyff, 'handleRemote');
+      $.jasmine.inject('<a id="no_cruyff_link" href="#">link</a>');
+      $.rails.handleRemote($('#no_cruyff_link'));
+      expect($.cruyff.handleRemote).not.toHaveBeenCalled();
+    });
+
     it('calls jquery ajax',function() {
       var callback = jasmine.createSpy();
       spyOn($, 'ajax').andCallFake(callback);
