@@ -58,7 +58,23 @@ describe('Cruyff',function() {
       expect($('#ajax-content').html()).toMatch('data');
     });
 
-    xit('renders waiting data', function() {
+    it('renders waiting data', function() {
+      $.cruyff.startingAjax('#ajax-content');
+      expect($('#ajax-content').css('display')).toEqual('none');
+      expect($('#cruyff-loading').length).toEqual(1);
+      $.cruyff.finishingAjax('#ajax-content');
+      expect($('#ajax-content').css('display')).toEqual('block');
+      expect($('#cruyff-loading').length).toEqual(0);
+      runs(function() {
+        spyOn($.cruyff, 'startingAjax');
+        spyOn($.cruyff, 'finishingAjax');
+        hyperlink.trigger('click');
+      });
+      waits(100);
+      runs(function() {
+        expect($.cruyff.startingAjax).toHaveBeenCalledWith('#ajax-content');
+        expect($.cruyff.finishingAjax).toHaveBeenCalledWith('#ajax-content');
+      });
     });
 
     it('setups cruyff element',function() {
@@ -84,9 +100,7 @@ describe('Cruyff',function() {
       expect(link_to_setup.attr('pass')).toEqual('#main');
       expect(form_to_setup.attr('data-remote')).toEqual('true');
       expect(form_to_setup.attr('pass')).toEqual('#main');
-
     });
-
   });
 
   describe('Render Ajax response', function() {
@@ -189,13 +203,13 @@ describe('Cruyff',function() {
       });
     });
 
-    it('loads browser url',function() {
+    it('routes browser url',function() {
       spyOn($.cruyff, 'start');
-      $.bbq.pushState('app=spec/fixtures/view');
-      $.cruyff.loadBrowserUrl('#ajax-content');
+      $.bbq.pushState('urlApp=spec/fixtures/view');
+      $.cruyff.route('urlApp','#ajax-content');
       expect($.cruyff.start).toHaveBeenCalledWith('spec/fixtures/view', '#ajax-content');
+      expect($.cruyff.element).toEqual('urlApp');
     });
-
   });
 
 });
