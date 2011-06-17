@@ -71,22 +71,22 @@ describe('Cruyff',function() {
       expect($('#ajax-content').html()).toMatch('data');
     });
 
-    it('renders waiting data', function() {
-      $.cruyff.startingAjax('#ajax-content');
+    it('renders loading content', function() {
+      $.cruyff.startLoading('#ajax-content');
       expect($('#ajax-content').css('display')).toEqual('none');
       expect($('#cruyff-loading').length).toEqual(1);
-      $.cruyff.finishingAjax('#ajax-content');
+      $.cruyff.finishLoading('#ajax-content');
       expect($('#ajax-content').css('display')).toEqual('block');
       expect($('#cruyff-loading').length).toEqual(0);
       runs(function() {
-        spyOn($.cruyff, 'startingAjax');
-        spyOn($.cruyff, 'finishingAjax');
+        spyOn($.cruyff, 'startLoading');
+        spyOn($.cruyff, 'finishLoading');
         hyperlink.trigger('click');
       });
       waits(100);
       runs(function() {
-        expect($.cruyff.startingAjax).toHaveBeenCalledWith('#ajax-content');
-        expect($.cruyff.finishingAjax).toHaveBeenCalledWith('#ajax-content');
+        expect($.cruyff.startLoading).toHaveBeenCalledWith('#ajax-content');
+        expect($.cruyff.finishLoading).toHaveBeenCalledWith('#ajax-content');
       });
     });
 
