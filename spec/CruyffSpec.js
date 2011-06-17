@@ -54,9 +54,9 @@ describe('Cruyff',function() {
     it('gets url with format', function() {
       var options = {url: 'some/url'};
       $.cruyff.setRequestFormat(options);
-      expect(options['url']).toEqual('some/url.html');
+      expect(options['url']).toEqual('some/url.xhtml');
       $.cruyff.setRequestFormat(options);
-      expect(options['url']).toEqual('some/url.html');
+      expect(options['url']).toEqual('some/url.xhtml');
     });
 
     it('gets reponse fragment html', function() {
