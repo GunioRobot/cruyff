@@ -100,19 +100,28 @@ describe('Cruyff',function() {
       });
     });
 
-    it('setups all elements',function() {
-      $.jasmine.inject('<div id="main"><form id="form_to_setup" action="#" method="#"></form></div>');
-      $.jasmine.inject('<div id="main"><a id="link_to_setup" href="#">remote_link</a></div>');
+    it('setups elements',function() {
+      $.jasmine.inject('<div id="main"><form id="form_to_setup" action="/some/url"></form></div>');
+      $.jasmine.inject('<div id="main"><a id="link_to_setup" href="/some/url">remote_link</a></div>');
+      $.jasmine.inject('<div id="main"><form id="form_to_not_setup" action="#"></form></div>');
+      $.jasmine.inject('<div id="main"><a id="link_to_not_setup" href="#">remote_link</a></div>');
+      $.jasmine.inject('<div id="main"><a id="link_to_not_setup_2" href="">remote_link</a></div>');
+      $.jasmine.inject('<div id="main"><a id="link_to_not_setup_3">remote_link</a></div>');
 
       $.cruyff.setUpElements('#main');
 
-      var form_to_setup = $('#form_to_setup');
-      var link_to_setup = $('#link_to_setup');
-
-      expect(link_to_setup.attr('data-remote')).toEqual('true');
-      expect(link_to_setup.attr('pass')).toEqual('#main');
-      expect(form_to_setup.attr('data-remote')).toEqual('true');
-      expect(form_to_setup.attr('pass')).toEqual('#main');
+      expect($('#link_to_setup').attr('data-remote')).toEqual('true');
+      expect($('#link_to_setup').attr('pass')).toEqual('#main');
+      expect($('#form_to_setup').attr('data-remote')).toEqual('true');
+      expect($('#form_to_setup').attr('pass')).toEqual('#main');
+      expect($('#link_to_not_setup').attr('data-remote')).not.toBeDefined();
+      expect($('#link_to_not_setup').attr('pass')).not.toBeDefined();
+      expect($('#form_to_not_setup').attr('data-remote')).not.toBeDefined();
+      expect($('#form_to_not_setup').attr('pass')).not.toBeDefined();
+      expect($('#link_to_not_setup_2').attr('data-remote')).not.toBeDefined();
+      expect($('#link_to_not_setup_2').attr('pass')).not.toBeDefined();
+      expect($('#link_to_not_setup_3').attr('data-remote')).not.toBeDefined();
+      expect($('#link_to_not_setup_3').attr('pass')).not.toBeDefined();
     });
   });
 
