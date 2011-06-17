@@ -71,6 +71,17 @@ describe('Cruyff',function() {
       expect($('#ajax-content').html()).toMatch('data');
     });
 
+    it('calls ready func', function() {
+      spyOn($.cruyff, 'ready');
+      runs(function() {
+        hyperlink.trigger('click');
+      });
+      waits(100);
+      runs(function() {
+        expect($.cruyff.ready).toHaveBeenCalledWith('#ajax-content');
+      });
+    });
+
     it('renders loading content', function() {
       $.cruyff.startLoading('#ajax-content');
       expect($('#ajax-content').css('display')).toEqual('none');
