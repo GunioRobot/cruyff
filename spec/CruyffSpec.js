@@ -107,7 +107,7 @@ describe('Cruyff',function() {
       });
       waits(100);
       runs(function() {
-        expect($.cruyff.settings.element[0].id).toEqual("hyperlink_id");
+        expect($.cruyff.element[0].id).toEqual("hyperlink_id");
       });
     });
 
@@ -274,6 +274,47 @@ describe('Cruyff',function() {
         expect($.bbq.getState('setted_url_desc')).toEqual('spec/fixtures/view');
       });
     });
+  });
+
+  describe('Back/Foward browser button with Ajax', function() {
+    beforeEach(function() {
+      $.jasmine.inject('<a id="link1" href="spec/fixtures/link1"\
+                         data-remote="true" pass="#ajax-content">link1</a>');
+      $.jasmine.inject('<a id="link2" href="spec/fixtures/link2"\
+                         data-remote="true" pass="#ajax-content">link2</a>');
+      $.jasmine.inject('<input id="back_button" type="button" onclick="history.back()">');
+      $.jasmine.inject('<input id="forward_button" type="button" onclick="history.forward()">');
+      $.bbq.pushState('bb=');
+      $.cruyff.settings.urlDesc = 'bb';
+    });
+
+    it('caches ajax calls',function() {
+      runs(function() {
+        $('#link1').trigger('click');
+        $('#link2').trigger('click');
+      });
+      waits(100);
+      runs(function() {
+        expect($.cruyff.cache['spec/fixtures/link1']).toMatch('link1 data');
+        expect($.cruyff.cache['spec/fixtures/link2']).toMatch('link2 data');
+      });
+    });
+
+    it('backs and forwards ajax calls',function() {
+      runs(function() {
+        $.cruyff.startHistory('#ajax-content');
+        $('#link1').trigger('click');
+        $('#link2').trigger('click');
+      });
+      waits(100);
+      runs(function() {
+        $('#back_button').trigger('click');
+        expect($('#ajax-content').html()).toMatch('link1 data');
+        $('#foward_button').trigger('click');
+        expect($('#ajax-content').html()).toMatch('link2 data');
+      });
+    });
+
   });
 
 });
