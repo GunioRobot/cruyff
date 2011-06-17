@@ -252,6 +252,18 @@ describe('Cruyff',function() {
       });
     });
 
+    it('bookmarks on start',function() {
+      runs(function() {
+        $.bbq.pushState('start=');
+        $.cruyff.settings.urlDesc = 'start';
+        $.cruyff.start('start', 'spec/fixtures/view', '#ajax-content');
+      });
+      waits(100);
+      runs(function() {
+        expect($.bbq.getState($.cruyff.settings.urlDesc)).toEqual('spec/fixtures/view');
+      });
+    });
+
     it('sets app name',function() {
       runs(function() {
         $.cruyff.settings.urlDesc = 'setted_url_desc';
