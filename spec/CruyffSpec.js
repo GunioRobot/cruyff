@@ -163,7 +163,7 @@ describe('Cruyff',function() {
       runs(function() {
         $.bbq.pushState('start=');
         $.cruyff.settings.urlDesc = 'start';
-        $.cruyff.start('start', 'spec/fixtures/view', '#ajax-content');
+        $.cruyff.start('spec/fixtures/view', '#ajax-content');
       });
       waits(100);
       runs(function() {
@@ -174,7 +174,7 @@ describe('Cruyff',function() {
     it('setups elements on start',function() {
       runs(function() {
         spyOn($.cruyff, 'setUpElements');
-        $.cruyff.start('start', 'spec/fixtures/view', '#ajax-content');
+        $.cruyff.start('spec/fixtures/view', '#ajax-content');
       });
       waits(100);
       runs(function() {
@@ -186,7 +186,7 @@ describe('Cruyff',function() {
       runs(function() {
         $.bbq.pushState('start=spec/fixtures/view');
         $.cruyff.settings.urlDesc = 'start';
-        $.cruyff.start('start', 'bad/url', '#ajax-content');
+        $.cruyff.start('bad/url', '#ajax-content');
       });
       waits(100);
       runs(function() {
@@ -198,7 +198,7 @@ describe('Cruyff',function() {
       runs(function() {
         $.bbq.pushState('start=');
         $.cruyff.settings.urlDesc = 'start';
-        $.cruyff.start('start', 'bad/url', '#ajax-content');
+        $.cruyff.start('bad/url', '#ajax-content');
       });
       waits(100);
       runs(function() {
@@ -256,7 +256,7 @@ describe('Cruyff',function() {
       runs(function() {
         $.bbq.pushState('start=');
         $.cruyff.settings.urlDesc = 'start';
-        $.cruyff.start('start', 'spec/fixtures/view', '#ajax-content');
+        $.cruyff.start('spec/fixtures/view', '#ajax-content');
       });
       waits(100);
       runs(function() {
@@ -278,20 +278,20 @@ describe('Cruyff',function() {
 
   describe('Back/Foward browser button with Ajax', function() {
     beforeEach(function() {
-      $.jasmine.inject('<a id="link1" href="spec/fixtures/link1"\
+      $.jasmine.inject('<a id="link_1" href="spec/fixtures/link1"\
                          data-remote="true" pass="#ajax-content">link1</a>');
-      $.jasmine.inject('<a id="link2" href="spec/fixtures/link2"\
+      $.jasmine.inject('<a id="link_2" href="spec/fixtures/link2"\
                          data-remote="true" pass="#ajax-content">link2</a>');
-      $.jasmine.inject('<input id="back_button" type="button" onclick="history.back()">');
-      $.jasmine.inject('<input id="forward_button" type="button" onclick="history.forward()">');
-      $.bbq.pushState('bb=');
-      $.cruyff.settings.urlDesc = 'bb';
+      $.jasmine.inject('<a id="back_link" href="#" onclick="history.back()">back</a>');
+      $.jasmine.inject('<a id="forward_link" href="#" onclick="history.forward()">forward</a>');
+      $.bbq.pushState('url=');
+      $.cruyff.settings.urlDesc = 'url';
     });
 
     it('caches ajax calls',function() {
       runs(function() {
-        $('#link1').trigger('click');
-        $('#link2').trigger('click');
+        $('#link_1').trigger('click');
+        $('#link_2').trigger('click');
       });
       waits(100);
       runs(function() {
@@ -301,20 +301,54 @@ describe('Cruyff',function() {
     });
 
     it('backs and forwards ajax calls',function() {
+      $.cruyff.startHistory('#ajax-content');
       runs(function() {
-        $.cruyff.startHistory('#ajax-content');
-        $('#link1').trigger('click');
-        $('#link2').trigger('click');
+        $('#link_1').trigger('click');
       });
       waits(100);
       runs(function() {
-        $('#back_button').trigger('click');
+        $('#link_2').trigger('click');
+      });
+      waits(100);
+      runs(function() {
+        $('#back_link').trigger('click');
+      });
+      waits(100);
+      runs(function() {
         expect($('#ajax-content').html()).toMatch('link1 data');
-        $('#foward_button').trigger('click');
+      });
+      waits(100);
+      runs(function() {
+        $('#forward_link').trigger('click');
+      });
+      waits(100);
+      runs(function() {
         expect($('#ajax-content').html()).toMatch('link2 data');
       });
     });
 
+    it('does not loads cache on cruyff calls',function() {
+      spyOn($.cruyff, 'success');
+      runs(function() {
+        $.cruyff.cache['spec/fixtures/link1'] = 'cached link 1';
+        $('#link_1').trigger('click');
+      });
+      waits(100);
+      runs(function() {
+        expect($.cruyff.success).toHaveBeenCalled();
+      });
+    }); 
+
+    it('starts history on cruyff start',function() {
+      spyOn($.cruyff, 'startHistory');
+      runs(function() {
+        $.cruyff.start('spec/fixtures/link1', '#ajax-content');
+      });
+      waits(100);
+      runs(function() {
+        expect($.cruyff.startHistory).toHaveBeenCalled();
+      });
+    }); 
   });
 
 });
