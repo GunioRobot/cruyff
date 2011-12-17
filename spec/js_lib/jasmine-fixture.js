@@ -14,7 +14,7 @@
 			$('#'+this.rootId).remove();
 			this.isReady = false;
 		}
-	};	
+	};
 })(jQuery);
 jQuery(function($){
   $.jasmine.init();

@@ -64,7 +64,7 @@ jasmine.Fixtures.prototype.createContainer_ = function(html) {
   $('body').append(container);
 };
 
-jasmine.Fixtures.prototype.getFixtureHtml_ = function(url) {  
+jasmine.Fixtures.prototype.getFixtureHtml_ = function(url) {
   if (typeof this.fixturesCache_[url] == 'undefined') {
     this.loadFixtureIntoCache_(url);
   }
